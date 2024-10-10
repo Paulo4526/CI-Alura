@@ -1,12 +1,19 @@
 services:
   postgres:
+# Informando ao docker qual imagem baixar que no nosso caso será do banco de dados postgres
     image: "postgres"
+# Aqui informamos nossas variaveis de ambiente, ou seja sao parametros que serão usados em qualquer ambiente
     environment:
+# Informamos aqui qual o valor do user, que na nossa imagem se chama root
       - POSTGRES_USER=root
+# Aqui informamos o password que também tem o valor de root
       - POSTGRES_PASSWORD=root
+# Aqui informamos qual o nome do banco de dados que tbm se chama root
       - POSTGRES_DB=root
     ports:
+# Aqui informamos qual a porta da nossa local será representada pela porta de rede da nossa maquina virtual
       - 5432:5432
+# Preciso estudar mais a fundo volumes para entender melhor o conceito
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
 
@@ -24,8 +31,17 @@ services:
     depends_on:
       - postgres
     environment:
+# Na nossa variavel de ambiente DB_HOST demos o parametro postgres devido o serviço de entrada ser postgres
+# ou seja, informamos o nome do nosso serviço como host.
       - DB_HOST=postgres
+# Em DB_USER colocamos o parametro como root devido ser o parametro necessário para acessar o postgress pela nossa aplicação em GO
       - DB_USER=root
+# O mesmo acontece em DB_PASSWORD
       - DB_PASSWORD=root
+# Também vemos que o nome do banco de dados é root devido ser o nome do banco criado em postgres
       - DB_NAME=root
+# A nossa porta a ser setada é 5432 como setado em ports dentro do nosso serviço de entrada postgres
       - DB_PORT=5432
+
+#OBS: Vemos que os parametros aqui informados estão todos alocados no nosso serviço de entrada como nome postgres na linha 2 do código.
+# É importante seguir os passos para que nossa aplicação acesse normalmente o banco.
