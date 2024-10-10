@@ -1,0 +1,35 @@
+# Aqui definimos o nome do nosso pipeline/workflow
+name: Continuous Integration
+
+# Aqui definimos quando meu pipeline será executado pela automatização
+on:
+  # Informamos que o pipeline será somente executado quando tivermos um push pra branch main
+  push:
+    branches: [ "main" ]
+  # Informamos que também o pipeline será executado quando tivermos um pull para a main
+  pull_request:
+    branches: [ "main" ]
+
+# Após a definição das condições de quando o pipeline será executado, aqui iniciamos o nosso job que é o que será feito
+# após as requisições sejam atendidas.
+jobs:
+  # Dano nome para o nosso primeiro job que se chama ci
+    ci:
+      # Aqui informamos que o nosso job será executado em uma maquina com o ubuntu instalado sendo sua ultima versão
+      runs-on: ubuntu-latest
+      # Agora informaremos o passo a passo da execução dentro da máquina virtual
+      steps:
+      # Informando que o wokflow será executado a partir de um repositório já esxistente na máquina virtual, ou seja é como
+      # se a maquina virtual fizesse um git clone do nosso projeto dentro desse repositório, e instalasse todos os programas necessários
+      # para a nossa aplicação
+      - uses: actions/checkout@v4
+
+      # Aqui fazemos a instalação do nosso Go dentor do nosso repositório actions(estudar melhor para entender)
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.22'
+
+      - name: Inicia Banco
+        run: compose up -d postgres
+        
