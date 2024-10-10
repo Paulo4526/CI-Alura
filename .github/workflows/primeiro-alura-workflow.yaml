@@ -19,17 +19,31 @@ jobs:
       runs-on: ubuntu-latest
       # Agora informaremos o passo a passo da execução dentro da máquina virtual
       steps:
-      # Informando que o wokflow será executado a partir de um repositório já esxistente na máquina virtual, ou seja é como
+      # Informando que o wokflow será executado a partir de um diretório/repositório já esxistente na máquina virtual, ou seja é como
       # se a maquina virtual fizesse um git clone do nosso projeto dentro desse repositório, e instalasse todos os programas necessários
       # para a nossa aplicação
       - uses: actions/checkout@v4
 
-      # Aqui fazemos a instalação do nosso Go dentor do nosso repositório actions(estudar melhor para entender)
+      # Aqui criamos nosso primeiro passo ou step esse step tem o nome de Set up Go
       - name: Set up Go
+      # Aqui setamos que dentro do nosso diretório/repositório actions/ seja criado outro diretório setup-go@v4 onde será armazenado nosso go
         uses: actions/setup-go@v4
+      # aqui informamos qual a versão do go será instalada dentro do nosso diretório/repositório
         with:
           go-version: '1.22'
 
+      # Após o primeiro passo teremos o segundo passo que será iniciar nosso banco postgres
       - name: Inicia Banco
-        run: compose up -d postgres
-        
+      # Aqui como no comando do docker, para iniciarmos somente a nossa imagem postgres(que é o mesmo nome do repositório da imagem)
+      # estamos utilizando o mesmo comando só que na máquina virtual, que sumulará outro ambiente
+        run: docker compose up -d postgres
+      
+      # Nesse terceiro step, iniciaremos nosso lint para teste
+      - name: Lint
+      # Vemos aqui também que estamos utilizando um comando docker para testar nossa aplicação e iniciar nosso lint na máquina virtual
+        run: docker run --rm -itv $(CURDIR):/app -w /app golangci/golangci-lint golangci-lint run controllers/ database/ models/ routes/
+
+      # E por ultimo após a instalação do nosso lint na máquina virtual, criamos o comando teste para testar alguma aplicação nossa.
+      - name: Teste Go
+      # Comando go para teste da nossa aplicação
+        run: go test -v main_test.go
