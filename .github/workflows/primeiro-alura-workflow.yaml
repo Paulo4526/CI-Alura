@@ -50,4 +50,4 @@ jobs:
       - name: Teste Go
       # Comando go para teste da nossa aplicação usando os parametros secrets que fica na pasta do repositório git, settings, Secrets and Variables e actions
       # Após isso só adicionar Repositorys Secrets
-        run: DB_HOST=${{ secrets.DB_HOST }} DB_USER =${{ secrets.DB_USER }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} DB_NAME=${{ secrets.DB_NAME }} DB_PORT=${{ secrets.DB_PORT }} go test -v main_test.go/
+        run: DB_HOST=${{ secrets.DB_HOST }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} DB_USER =${{ secrets.DB_USER }} DB_NAME=${{ secrets.DB_NAME }} DB_PORT=${{ secrets.DB_PORT }} go test -v main_test.go/
